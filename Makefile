@@ -10,25 +10,37 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME		:= so_long.a
+NAME		:= so_long
 CC 			:= cc
 CFLAGS		:= -Wall -Wextra -Werror
 RM			:= rm -f
-SRCS	:= 
+INC		:= -I source -I get_next_line -I Libft -I printf -I minilibx-linux
+LIB 	:= -L Libft -lft -L printf -l:printf.a -L minilibx-linux -lmlx -lX11 -lXext -lm
+SRCS 	:=	source/main.c \
+			get_next_line/get_next_line.c \
+			get_next_line/get_next_line_utils.c \
+
 OBJS	:= $(SRCS:.c=.o)
 
 all: $(NAME)
 
 $(NAME):$(OBJS)
-	ar rcs $(NAME) $(OBJS)
+	$(MAKE) -C Libft
+	$(MAKE) -C printf
+	$(MAKE) -C minilibx-linux
+	$(CC) $(CFLAGS) $(OBJS) $(LIB) -o $(NAME)
 
 %.o:%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
+	$(MAKE) -C Libft clean
+	$(MAKE) -C printf clean
+	$(MAKE) -C minilibx-linux clean
 	$(RM) $(OBJS)
 
 fclean: clean
+	$(MAKE) -C Libft fclean
 	$(RM) $(NAME)
 
 re:
